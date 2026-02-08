@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Entry Sequence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+}
+
+.text {
+  position: fixed;
+  bottom: 15%;
+  width: 100%;
+  text-align: center;
+  color: #e5e7eb;
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="c"></canvas>
+<div class="text" id="t"></div>
+<div class="flash" id="flash"></div>
+
+<script>
+const c = document.getElementById("c");
+const ctx = c.getContext("2d");
+const flash = document.getElementById("flash");
+const text = document.getElementById("t");
+
+c.width = innerWidth;
+c.height = innerHeight;
+onresize = () => { c.width = innerWidth; c.height = innerHeight; };
+
+/* CUMULATIVE 6 STARS */
+let display = "";      // cumulative stars
+let maxStars = 6;      // total stars
+let starCount = 0;
+
+const starInterval = setInterval(() => {
+  if (starCount < maxStars) {
+    display += "*";             // add one star
+    text.textContent = display; // update text
+    starCount++;                // increment counter
+  } else {
+    clearInterval(starInterval); // stop at 6 stars
+  }
+}, 4500); // add one star per second
+
+/* DEPTH PARTICLES */
+const stars = [];
+const STAR_COUNT = 1000;
+
+for (let i = 0; i < STAR_COUNT; i++) {
+  stars.push({
+    x: Math.random() * c.width - c.width / 2,
+    y: Math.random() * c.height - c.height / 2,
+    z: Math.random() * c.width
+  });
+}
+
+let speed = 18;
+let time = 0;
+
+function pathOffset(t) {
+  if (t < 300) return { x: 0, y: 0 };           // straight
+  if (t < 600) return { x: t - 300, y: 0 };     // right
+  if (t < 900) return { x: 600 - t, y: 0 };     // left
+  if (t < 1200) return { x: t - 900, y: 0 };    // right
+  return { x: 0, y: 0 };
+}
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  ctx.save();
+  ctx.translate(c.width / 2, c.height / 2);
+
+  time++;
+  speed += 0.0015; // acceleration
+
+  const offset = pathOffset(time);
+
+  for (let s of stars) {
+    s.z -= speed;
+
+    if (s.z <= 0) {
+      s.z = c.width;
+      s.x = Math.random() * c.width - c.width / 2;
+      s.y = Math.random() * c.height - c.height / 2;
+    }
+
+    const scale = 400 / s.z;
+    const x = (s.x + offset.x) * scale;
+    const y = (s.y + offset.y) * scale;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#38bdf8";
+    ctx.arc(x, y, scale * 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+/* FINAL FLASH */
+setTimeout(() => flash.style.opacity = 1, 27000);
+setTimeout(() => location.href = "app.html", 30000);
+</script>
+
+</body>
+</html>
