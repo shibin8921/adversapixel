@@ -5,11 +5,8 @@
   <title>AdversaPixels</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Favicon -->
-  <link rel="icon" href="favicon.png" type="image/png">
-
-  <!-- SEO -->
   <meta name="description" content="AdversaPixels — Adversarial Pixel Perturbation and Image Distortion Research Lab">
+  <link rel="icon" href="assets/logo.png" type="image/png">
 
   <style>
     * {
@@ -28,15 +25,24 @@
       justify-content: center;
     }
 
-    /* TOP LEFT LOGO */
+    /* LOGO BASE */
+    .site-logo {
+      filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.35));
+      animation: fadeIn 1.2s ease-out;
+    }
+
+    /* TOP LEFT POSITION */
     .top-left {
       position: fixed;
-      top: 24px;
-      left: 28px;
-      height: 72px;        /* DESKTOP SIZE */
-      width: auto;
-      max-width: 320px;
+      top: 20px;
+      left: 20px;
+      width: 300px;
       z-index: 1000;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .container {
@@ -66,6 +72,8 @@
     .actions {
       display: flex;
       justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -93,19 +101,15 @@
       opacity: 0.7;
     }
 
-    /* MOBILE */
     @media (max-width: 600px) {
       h1 {
         font-size: 32px;
       }
-
       p {
         font-size: 16px;
       }
-
       .top-left {
-        height: 44px;     /* MOBILE SIZE */
-        max-width: 200px;
+        width: 90px;
       }
     }
   </style>
@@ -113,10 +117,11 @@
 
 <body>
 
-  <!-- LOGO -->
-  <img src="assets/logo.png" alt="AdversaPixels logo" class="top-left">
+  <!-- TOP LEFT LOGO -->
+  <img src="assets/logo.png" alt="AdversaPixels logo" class="site-logo top-left">
 
   <div class="container">
+
     <h1>
       MAKE IMAGES <span>HARDER</span> FOR<br />
       AI <span>TO MISUSE</span>
@@ -129,7 +134,9 @@
     </p>
 
     <div class="actions">
-      <button class="btn btn-primary" onclick="window.location.href='transition.html'">
+      <button
+        class="btn btn-primary"
+        onclick="window.location.href='transition.html'">
         START
       </button>
     </div>
@@ -137,6 +144,7 @@
     <div class="footer-note">
       No uploads are stored • Privacy-first design
     </div>
+
   </div>
 
 </body>
