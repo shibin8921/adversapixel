@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>AdversaPixels</title>
-<meta name="description" content="AdversaPixels — Adversarial Pixel Perturbation and Image Distortion Research Lab">
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <link rel="icon" href="assets/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Branding / SEO -->
+  <meta name="description" content="AdversaPixels — Adversarial Pixel Perturbation and Image Distortion Research Lab">
+  <link rel="icon" href="assets/logo.png">
+
   <style>
     * {
       margin: 0;
@@ -28,6 +31,19 @@
       width: 90%;
       text-align: center;
       padding: 40px;
+    }
+
+    /* LOGO */
+    .site-logo {
+      width: 160px;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.35));
+      animation: fadeIn 1.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .badge {
@@ -105,15 +121,21 @@
       p {
         font-size: 16px;
       }
+      .site-logo {
+        width: 130px;
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    
+
+    <!-- LOGO -->
+    <img src="assets/logo.png" alt="AdversaPixels logo" class="site-logo">
+
     <h1>
-      MAKE IMAGES <span class="highlight">HARDER</span> FOR<br />
+      MAKE IMAGES <span>HARDER</span> FOR<br />
       AI <span>TO MISUSE</span>
     </h1>
 
@@ -124,7 +146,6 @@
     </p>
 
     <div class="actions">
-
       <button
         class="btn btn-primary"
         onclick="window.location.href='transition.html'">
@@ -135,7 +156,7 @@
     <div class="footer-note">
       No uploads are stored • Privacy-first design
     </div>
+
   </div>
 </body>
-
 </html>
