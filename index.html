@@ -1,166 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NBXBXNE1QV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBXBXNE1QV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NBXBXNE1QV');
+  </script>
 
-  gtag('config', 'G-NBXBXNE1QV');
-</script>
   <meta charset="UTF-8" />
   <title>AdversaPixels</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <meta name="description" content="AdversaPixels — Adversarial Pixel Perturbation and Image Distortion Lab">
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>AdversaPixels</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AdversaPixels — Adversarial Pixel Perturbation and Image Distortion Research Lab">
-<link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="shortcut icon" href="/assets/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/assets/site.webmanifest">
-  <link rel="icon" href="assets/logo.png" type="image/png">
+
+  <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+<style>
+/* ===== GLOBAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== LANDING SECTION ===== */
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #ffffff;
+}
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-logo {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 220px;
+  filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.35));
+  z-index: 1000;
+}
+
+.container {
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+h1 span {
+  color: #ffb703;
+}
+
+p {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  background: #ffb703;
+  color: #000;
+}
+
+.btn:hover {
+  background: #ffd166;
+}
+
+.footer-note {
+  margin-top: 40px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* ===== APP SECTION (UNCHANGED STYLES FROM app.html) ===== */
+.app-section {
+  padding: 80px 20px;
+  background: #0f172a;
+}
+
+.app-shell {
+  max-width:1200px;
+  margin:0 auto;
+  text-align:center;
+  color:#e5e7eb;
+}
+
+h2 { margin-bottom: 30px;}
+
+input, button {
+  padding:10px 20px;
+  font-size:16px;
+  border-radius:6px;
+  border:none;
+  background-color:#3b82f6;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover { background-color:#2563eb;}
+button:disabled { opacity:0.5; cursor:not-allowed;}
+
+canvas {
+  border:2px solid #38bdf8;
+  display:block;
+  margin:10px auto;
+}
+
+.image-container {
+  margin-top:20px;
+  border:1px solid #3b82f6;
+  padding:10px;
+  display:inline-block;
+}
+
+.diff-container {
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+
+.diff-box { text-align:center;}
+.label { font-size:14px; margin-top:5px; color:#e5e7eb;}
+.pixel-grid { display:flex; flex-wrap:wrap; justify-content:center;}
+.pixel-item { margin:5px; text-align:center;}
+.center-btn { display:block; margin:10px auto;}
+.progress { font-size:12px; color:#a5b4fc; margin-top:5px;}
+
+.workspace-note {
+  max-width:700px;
+  margin:0 auto 30px;
+  font-size:14px;
+  color:#c7d2fe;
+  line-height:1.6;
+}
+</style>
 </head>
+
 <body>
 
+<!-- LOGO -->
+<img src="assets/logo.png" alt="AdversaPixels logo" class="site-logo">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* LOGO BASE */
-    .site-logo {
-      filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.35));
-      animation: fadeIn 1.2s ease-out;
-    }
-
-    /* TOP LEFT POSITION */
-    .top-left {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 220px;
-      z-index: 1000;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .container {
-      max-width: 900px;
-      width: 90%;
-      text-align: center;
-      padding: 40px;
-    }
-
-    h1 {
-      font-size: 42px;
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-
-    h1 span {
-      color: #ffb703;
-    }
-
-    p {
-      font-size: 18px;
-      opacity: 0.9;
-      margin-bottom: 40px;
-      line-height: 1.6;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 14px 28px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .btn-primary {
-      background: #ffb703;
-      color: #000;
-    }
-
-    .btn-primary:hover {
-      background: #ffd166;
-    }
-
-    .footer-note {
-      margin-top: 40px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 32px;
-      }
-      p {
-        font-size: 16px;
-      }
-      .top-left {
-        width: 90px;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- TOP LEFT LOGO -->
-  <img src="assets/logo.png" alt="AdversaPixels logo" class="site-logo top-left">
-
-  <main class="container" id="main-content">
-
+<!-- ===== LANDING ===== -->
+<section class="landing">
+  <div class="container">
     <h1>
-      MAKE IMAGES <span>HARDER</span> FOR<br />
+      MAKE IMAGES <span>HARDER</span> FOR<br>
       AI <span>TO INTERPRET</span>
     </h1>
 
     <p>
-      Upload your image,and our algorithum alter the pixels in your image to reduce the risk of being 
-      interpret by AI models. 
-      Without breaking image clarity.
+      Upload your image, and our algorithm subtly alters pixel-level structures to
+      reduce the reliability of AI-based analysis, while preserving visual clarity
+      for human perception.
     </p>
 
     <div class="actions">
-      <button
-        class="btn btn-primary"
-        onclick="window.location.href='app.html'">
+      <button class="btn" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">
         START
       </button>
     </div>
@@ -168,9 +196,98 @@
     <div class="footer-note">
       No uploads are stored • Privacy-first design
     </div>
+  </div>
+</section>
 
-  </main>
+<!-- ===== APP (UNCHANGED LOGIC) ===== -->
+<section class="app-section" id="app">
+  <div class="app-shell">
+
+    <h2>Adversarial Pixel Perturbation</h2>
+
+    <div class="workspace-note">
+      Upload one or more images and generate controlled pixel perturbations.
+      These distortions introduce instability for automated vision systems,
+      while remaining difficult to detect through human visual perception.
+    </div>
+
+    <input type="file" id="upload" accept="image/*" multiple />
+    <div id="allImages"></div>
+
+  </div>
+</section>
+
+<script>
+/* ===== UNCHANGED app.html SCRIPT ===== */
+const upload = document.getElementById("upload");
+const allImages = document.getElementById("allImages");
+
+const MAX_SIZE = 800;
+let seed = Math.floor(Math.random()*1000000);
+function seededRandom(){ let x=Math.sin(seed++)*10000; return x-Math.floor(x); }
+function clamp(v){ return Math.max(0, Math.min(255, v)); }
+
+upload.addEventListener("change", e=>{
+  const files = e.target.files;
+  allImages.innerHTML = '';
+
+  Array.from(files).forEach((file, idx)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(MAX_SIZE / img.width, MAX_SIZE / img.height, 1);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+
+      const container = document.createElement("div");
+      container.className = "image-container";
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const originalData = ctx.getImageData(0,0,w,h);
+      let distortedData = ctx.createImageData(w,h);
+
+      const progressText = document.createElement("div");
+      progressText.className = "progress";
+
+      const generateBtn = document.createElement("button");
+      generateBtn.textContent = "Generate Distorted Image";
+
+      const downloadBtn = document.createElement("button");
+      downloadBtn.textContent = "Download Distorted Image";
+      downloadBtn.disabled = true;
+
+      generateBtn.onclick = ()=>{
+        generateBtn.disabled = true;
+        const totalPixels = w*h;
+        for(let i=0;i<totalPixels*4;i+=4){
+          distortedData.data[i]   = clamp(originalData.data[i]   + Math.floor(seededRandom()*7-3));
+          distortedData.data[i+1] = clamp(originalData.data[i+1] + Math.floor(seededRandom()*7-3));
+          distortedData.data[i+2] = clamp(originalData.data[i+2] + Math.floor(seededRandom()*7-3));
+          distortedData.data[i+3] = 255;
+        }
+        ctx.putImageData(distortedData,0,0);
+        downloadBtn.disabled = false;
+        progressText.textContent = "Completed ✔";
+      };
+
+      downloadBtn.onclick = ()=>{
+        const link = document.createElement("a");
+        link.download = "distorted_"+idx+".png";
+        link.href = canvas.toDataURL();
+        link.click();
+      };
+
+      container.append(canvas, progressText, generateBtn, downloadBtn);
+      allImages.appendChild(container);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+});
+</script>
 
 </body>
 </html>
-
