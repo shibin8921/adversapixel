@@ -34,6 +34,7 @@
 body {
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: #ffffff;
+  overflow-x: hidden;
 }
 
 .landing {
@@ -41,6 +42,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  position: relative;
 }
 
 .site-logo {
@@ -55,7 +58,6 @@ body {
 .container {
   max-width: 900px;
   width: 90%;
-  text-align: center;
   padding: 40px;
 }
 
@@ -65,9 +67,7 @@ h1 {
   line-height: 1.2;
 }
 
-h1 span {
-  color: #ffb703;
-}
+h1 span { color: #ffb703; }
 
 p {
   font-size: 18px;
@@ -76,36 +76,58 @@ p {
   line-height: 1.6;
 }
 
-.actions {
-  display: flex;
-  justify-content: center;
-}
-
-.btn {
-  padding: 14px 28px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  background: #ffb703;
-  color: #000;
-}
-
-.btn:hover {
-  background: #ffd166;
-}
-
 .footer-note {
   margin-top: 40px;
   font-size: 14px;
   opacity: 0.7;
 }
 
-/* ===== APP SECTION (UNCHANGED STYLES FROM app.html) ===== */
+/* ===== SCROLL ARROW ===== */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 1.5s infinite;
+  transition: opacity 1s ease, transform 1.5s ease;
+  cursor: pointer;
+}
+
+.scroll-indicator::before {
+  content: "⇩";
+  font-size: 34px;
+  color: #ffb703;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translate(-50%,0); }
+  50% { transform: translate(-50%,-10px); }
+}
+
+.scroll-indicator.fade-away {
+  opacity: 0;
+  transform: translate(180px,-60px) rotate(40deg);
+  pointer-events: none;
+}
+
+/* ===== APP SECTION ===== */
 .app-section {
   padding: 80px 20px;
   background: #0f172a;
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+
 }
 
 .app-shell {
@@ -143,7 +165,7 @@ canvas {
   display:inline-block;
 }
 
-.diff-container {
+.seediff-container {
   display:flex;
   justify-content:center;
   gap:50px;
@@ -151,7 +173,7 @@ canvas {
   flex-wrap:wrap;
 }
 
-.diff-box { text-align:center;}
+.seediff-box { text-align:center;}
 .label { font-size:14px; margin-top:5px; color:#e5e7eb;}
 .pixel-grid { display:flex; flex-wrap:wrap; justify-content:center;}
 .pixel-item { margin:5px; text-align:center;}
@@ -187,11 +209,8 @@ canvas {
       for human perception.
     </p>
 
-    <div class="actions">
-      <button class="btn" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">
-        START
-      </button>
-    </div>
+    <!-- Downward Scroll Arrow -->
+    <div class="scroll-indicator" id="scrollArrow" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})"></div>
 
     <div class="footer-note">
       No uploads are stored • Privacy-first design
@@ -199,7 +218,7 @@ canvas {
   </div>
 </section>
 
-<!-- ===== APP (UNCHANGED LOGIC) ===== -->
+<!-- ===== APP SECTION ===== -->
 <section class="app-section" id="app">
   <div class="app-shell">
 
@@ -216,24 +235,31 @@ canvas {
 
   </div>
 </section>
-
 <script>
-/* ===== UNCHANGED app.html SCRIPT ===== */
+/* Scroll arrow fade-away */
+const arrow = document.getElementById("scrollArrow");
+window.addEventListener("scroll", () => {
+  const scrolled = window.scrollY / document.body.scrollHeight;
+  if (scrolled > 0.25) arrow.classList.add("fade-away");
+});
+
+/* ===== IMAGE PERTURBATION SCRIPT ===== */
 const upload = document.getElementById("upload");
 const allImages = document.getElementById("allImages");
 
 const MAX_SIZE = 800;
-let seed = Math.floor(Math.random()*1000000);
-function seededRandom(){ let x=Math.sin(seed++)*10000; return x-Math.floor(x); }
-function clamp(v){ return Math.max(0, Math.min(255, v)); }
+let seed = Math.floor(Math.random() * 1000000);
 
-upload.addEventListener("change", e=>{
+function seededRandom() { let x = Math.sin(seed++) * 10000; return x - Math.floor(x); }
+function clamp(v) { return Math.max(0, Math.min(255, v)); }
+
+upload.addEventListener("change", e => {
   const files = e.target.files;
   allImages.innerHTML = '';
 
-  Array.from(files).forEach((file, idx)=>{
+  Array.from(files).forEach((file, idx) => {
     const img = new Image();
-    img.onload = ()=>{
+    img.onload = () => {
       const scale = Math.min(MAX_SIZE / img.width, MAX_SIZE / img.height, 1);
       const w = Math.round(img.width * scale);
       const h = Math.round(img.height * scale);
@@ -247,8 +273,8 @@ upload.addEventListener("change", e=>{
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, w, h);
 
-      const originalData = ctx.getImageData(0,0,w,h);
-      let distortedData = ctx.createImageData(w,h);
+      const originalData = ctx.getImageData(0, 0, w, h);
+      let distortedData = ctx.createImageData(w, h);
 
       const progressText = document.createElement("div");
       progressText.className = "progress";
@@ -260,34 +286,107 @@ upload.addEventListener("change", e=>{
       downloadBtn.textContent = "Download Distorted Image";
       downloadBtn.disabled = true;
 
-      generateBtn.onclick = ()=>{
-        generateBtn.disabled = true;
-        const totalPixels = w*h;
-        for(let i=0;i<totalPixels*4;i+=4){
-          distortedData.data[i]   = clamp(originalData.data[i]   + Math.floor(seededRandom()*7-3));
-          distortedData.data[i+1] = clamp(originalData.data[i+1] + Math.floor(seededRandom()*7-3));
-          distortedData.data[i+2] = clamp(originalData.data[i+2] + Math.floor(seededRandom()*7-3));
-          distortedData.data[i+3] = 255;
-        }
-        ctx.putImageData(distortedData,0,0);
-        downloadBtn.disabled = false;
-        progressText.textContent = "Completed ✔";
-      };
+      // Create Show Difference button
+      const seeDiffBtn = document.createElement("button");
+      seeDiffBtn.textContent = "Show Difference";
+      seeDiffBtn.disabled = true;
+      seeDiffBtn.className = "center-btn";
 
-      downloadBtn.onclick = ()=>{
+      // Create the container for pixel grids
+      const diffContainer = document.createElement("div");
+      diffContainer.className = "diff-container";
+      diffContainer.style.display = "none";
+      diffContainer.style.gap = "40px";
+
+      const origPixelGrid = document.createElement("div");
+      origPixelGrid.className = "pixel-grid";
+      origPixelGrid.style.border = "1px solid #38bdf8";
+      origPixelGrid.style.padding = "10px";
+      origPixelGrid.style.minWidth = "150px";
+
+      const distPixelGrid = document.createElement("div");
+      distPixelGrid.className = "pixel-grid";
+      distPixelGrid.style.border = "1px solid #f87171";
+      distPixelGrid.style.padding = "10px";
+      distPixelGrid.style.minWidth = "150px";
+
+      diffContainer.append(origPixelGrid, distPixelGrid);
+
+      // Click handler for Show Difference
+      seeDiffBtn.addEventListener("click", () => {
+        origPixelGrid.innerHTML = '<strong>Original Pixels</strong><br>';
+        distPixelGrid.innerHTML = '<strong>Distorted Pixels</strong><br>';
+
+        const totalPixels = w * h;
+        const picks = [];
+        while (picks.length < 5) {
+          const r = Math.floor(Math.random() * totalPixels);
+          if (!picks.includes(r)) picks.push(r);
+        }
+
+        picks.forEach(pixelIndex => {
+          const i = pixelIndex * 4;
+
+          const oItem = document.createElement("div");
+          oItem.className = "pixel-item";
+          oItem.innerHTML = `Pixel ${pixelIndex}<br>R=${originalData.data[i]} G=${originalData.data[i + 1]} B=${originalData.data[i + 2]}`;
+          origPixelGrid.appendChild(oItem);
+
+          const dItem = document.createElement("div");
+          dItem.className = "pixel-item";
+          dItem.innerHTML = `Pixel ${pixelIndex}<br>R=${distortedData.data[i]} G=${distortedData.data[i + 1]} B=${distortedData.data[i + 2]}`;
+          distPixelGrid.appendChild(dItem);
+        });
+
+        diffContainer.style.display = "flex"; // show container
+      });
+
+      // Generate distorted image
+      generateBtn.addEventListener("click", () => {
+        generateBtn.disabled = true;
+
+        const totalPixels = w * h;
+        const indices = Array.from({ length: totalPixels }, (_, i) => i).sort(() => Math.random() - 0.5);
+        let processed = 0;
+
+        function batch() {
+          const batchSize = Math.ceil(totalPixels / 2400);
+          for (let n = 0; n < batchSize && processed < totalPixels; n++, processed++) {
+            const p = indices[processed] * 4;
+            distortedData.data[p]     = clamp(originalData.data[p]     + Math.floor(seededRandom() * 7 - 3));
+            distortedData.data[p + 1] = clamp(originalData.data[p + 1] + Math.floor(seededRandom() * 7 - 3));
+            distortedData.data[p + 2] = clamp(originalData.data[p + 2] + Math.floor(seededRandom() * 7 - 3));
+            distortedData.data[p + 3] = 255;
+          }
+          ctx.putImageData(distortedData, 0, 0);
+          progressText.textContent = `Generating… ${Math.floor((processed / totalPixels) * 100)}%`;
+          if (processed < totalPixels) requestAnimationFrame(batch);
+          else {
+            progressText.textContent = "Completed ✔";
+            downloadBtn.disabled = false;
+            seeDiffBtn.disabled = false; 
+          }
+        }
+
+        batch();
+      });
+    downloadBtn.onclick = () => {
         const link = document.createElement("a");
-        link.download = "distorted_"+idx+".png";
+        link.download = "distorted_" + idx + ".png";
         link.href = canvas.toDataURL();
         link.click();
       };
 
-      container.append(canvas, progressText, generateBtn, downloadBtn);
+      generateBtn.className = "center-btn";
+      downloadBtn.className = "center-btn";
+      seeDiffBtn.className = "center-btn";
+
+      container.append(canvas, progressText, generateBtn, downloadBtn, seeDiffBtn, diffContainer);
       allImages.appendChild(container);
     };
     img.src = URL.createObjectURL(file);
   });
 });
 </script>
-
 </body>
 </html>
